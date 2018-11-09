@@ -2,7 +2,7 @@
 """
 Created on Mon Oct 29 14:15:50 2018
 
-@author: PE_102
+@author: TeamIATECH
 """
 class PlayingCard():
     """Abstract parent class for Trump, Card and Excuse.
@@ -15,6 +15,7 @@ class PlayingCard():
     def __init__(self, n, p=0.5, o=0):
         assert self.__class__ is not PlayingCard
         self.__rank=n
+        self.rank = n
         self.__point=p
         self.__oulder=o
     
