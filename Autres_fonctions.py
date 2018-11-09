@@ -86,6 +86,9 @@ def sorting(deck):
         if isinstance(deck[j],Trump):
             L.append(deck[j])
     L.sort()
+    for j in range(n):
+        if isinstance(deck[j],Excuse):
+            L.append(deck[j])
     output += L
     return output
         
