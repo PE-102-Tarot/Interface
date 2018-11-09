@@ -39,7 +39,7 @@ class Human(Player):
         return (playable_cards[card])
     
     def bid(self):
-        listeBid = ["Passe","Petite","Prise","Garde","Garde sans","Garde contre"] 
+        listeBid = ["Passe","Petite","Garde","Garde sans","Garde contre"] 
         while True:
             print(listeBid)
             choice = input("Votre choix de Prise? (Ecrire en lettre)")
