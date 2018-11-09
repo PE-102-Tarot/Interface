@@ -15,19 +15,18 @@ import random
 
      
 def bidding(dealer,players):
-    """#J'ai commenté la version de Leapold en attendant qu'il complete
     first_chooser = (dealer+1)%4
+    
+    
     for i in range(4):
         index = (first_chooser+i)%4
         if isinstance(players[index],Human):
             choice = players[index].bid()
             if choice != "Passe":
                 return index,choice
-    print("Personne n'a pris")
+    print("\nPersonne n'as choisi")
+    return dealer,"Passe"
     #Reshuffle Game
-    #
-    """
-    return random.randint(0,3), ['Petite','Garde','Garde Sans','Garde Contre'][random.randint(0,3)]
 
 
 def result(oulders,bid,points):
@@ -84,6 +83,8 @@ def game(players,dealer):
     """Dealer(int) : Numero du dealer, Players(liste(IA,Human)): Liste qui contient les instances des humains et des IA"""
     dog=deal(players)
     bidder, bid = bidding(dealer,players)#Identifier bidder & defender  # Bidder(int) Numero du bidder, Bid(str) type de prise
+    if bid =="Passe":
+       return bid
     print("Le joueur "+str(bidder)+" a pris un contrat: "+bid)
     first_player=(dealer+1)%4
     points_bidder, points_defenders, oulders= 0, 0, 0
@@ -143,13 +144,18 @@ def game(players,dealer):
 
 
 def begin_game(n):
-    game_on=True
+    
     dealer=random.randint(0,3)
     players=create_players(n)
+    start_game(dealer,players)
+
+def start_game(dealer,players): #Pour un reshuffle
+    game_on = True
     while game_on:
-        game(players,dealer)
-        game_on=bool('True'==input("Pour continuer, écrire True"))
-        dealer+=1
+        bid = game(players,dealer)
+        if bid != "Passe":    
+            game_on=bool('True'==input("Pour continuer, écrire True"))
+            dealer+=1
 
 
 if __name__ == '__main__':
