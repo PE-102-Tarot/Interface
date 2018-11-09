@@ -42,6 +42,8 @@ class Human(Player):
         listeBid = ["Passe","Petite","Garde","Garde sans","Garde contre"] 
         while True:
             print(listeBid)
+            print("\nVos cartes")
+            print(self.get_hand())
             choice = input("Votre choix de Prise? (Ecrire en lettre)")
             for i in range(len(listeBid)):
                 if choice == listeBid[i]:
