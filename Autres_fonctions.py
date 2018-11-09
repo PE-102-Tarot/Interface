@@ -15,6 +15,7 @@ import random
 
      
 def bidding(dealer,players):
+     #uguhfgrsvedxgh
     """#J'ai commenté la version de Leapold en attendant qu'il complete
     first_chooser = (dealer+1)%4
     for i in range(4):
