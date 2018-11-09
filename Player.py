@@ -88,16 +88,7 @@ class Player():
             return L+ex or self.playing_trump(trick)+ex
         elif isinstance(trick[0], Excuse):
             return self.playable_cards(trick[1:])
-        
-    def bid(self):
-        listeBid = ["Passe","Petite","Garde","Garde sans","Garde contre"]
-        while True:
-            print(listeBid)
-            choice= input("Votre choix de Prise? (Ecrire en lettre)")
-            for i in range(len(listeBid)):
-                if choice == listeBid[i]:
-                    return choice
-            print("\nArgument non valide")
+ 
 
 
 if __name__ == '__main__':
