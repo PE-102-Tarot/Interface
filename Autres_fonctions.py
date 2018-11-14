@@ -33,7 +33,7 @@ def result(oulders,bid,points):
     """Return the scoring points that each player gives to the bidder
     
     The bonuses are not counted here."""
-    multiplier= {'Petite':1,'Garde':2,'Garde Sans':4,'Garde Contre':6}[bid]
+    multiplier= {'Petite':1,'Garde':2,'Garde sans':4,'Garde contre':6}[bid]
     if oulders==0:
         g=points-36
     elif oulders==1:
