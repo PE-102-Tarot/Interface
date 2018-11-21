@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Oct 29 14:14:04 2018
-
-@author: axel
+@author: TeamIATECH
 """
 from PlayingCard import PlayingCard
 from Trump import Trump
@@ -12,16 +11,17 @@ from Player import Player
 from Human import Human
 from IA import IA
 import random
+import operator#Pour trier les cartes
 
      
-def bidding(dealer,players):
+def bidding(dealer,players,dog):
     first_chooser = (dealer+1)%4
     
     
     for i in range(4):
         index = (first_chooser+i)%4
         if isinstance(players[index],Human):
-            choice = players[index].bid()
+            choice = players[index].bid(dog)
             if choice != "Passe":
                 return index,choice
     print("\nPersonne n'as choisi")
@@ -69,6 +69,34 @@ def deal(players):
         (players[i]).set_hand(deck[(i*18):((i+1)*18)])
     return dog
 
+def sorting(deck):
+    output = []
+    n = len(deck)
+    color = ["S","H","D","C"]
+    for i in range(4):#On s'occupe d'abord des cartes normales
+        L = []
+        for j in range(n):
+            if isinstance(deck[j],Card) and deck[j].get_suit() == color[i]:
+                L.append(deck[j]) #On met tout les cartes d'une meme couleur dans une liste L
+        L.sort(key = operator.attrgetter('rank'))   
+        """WARNING : Marche mais je dois creer un attribut public des cartes self.rank..."""
+        output +=L
+    L = []
+    for j in range(n):#Puis des atouts
+        if isinstance(deck[j],Trump):
+            L.append(deck[j])
+    L.sort()
+    for j in range(n):
+        if isinstance(deck[j],Excuse):
+            L.append(deck[j])
+    output += L
+    return output
+        
+            
+    
+                
+                
+                
 
 def create_players(n):
     players=[]
@@ -82,10 +110,12 @@ def create_players(n):
 def game(players,dealer):
     """Dealer(int) : Numero du dealer, Players(liste(IA,Human)): Liste qui contient les instances des humains et des IA"""
     dog=deal(players)
-    bidder, bid = bidding(dealer,players)#Identifier bidder & defender  # Bidder(int) Numero du bidder, Bid(str) type de prise
+    bidder, bid = bidding(dealer,players,dog)#Identifier bidder & defender  # Bidder(int) Numero du bidder, Bid(str) type de Passe
     if bid =="Passe":
        return bid
     print("Le joueur "+str(bidder)+" a pris un contrat: "+bid)
+    for i in range(4):
+        players[i].set_hand(sorting(players[i].get_hand()))
     first_player=(dealer+1)%4
     points_bidder, points_defenders, oulders= 0, 0, 0
     previous_trick=[]
@@ -166,5 +196,4 @@ def end_game(dealer,players):
 
 if __name__ == '__main__':
     #print(Player.best_card([Card(10,'H'),Card(11,'S'),Card(8,'H'),Card(13,'H')]))
-    begin_game(3)#L'humain sera le joueur 3
-    
+    begin_game(3)#L'humain sera le joueurs 
