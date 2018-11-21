@@ -17,6 +17,7 @@ class Card(PlayingCard):
     def __init__(self, n, s):
         PlayingCard.__init__(self, n)
         self.__suit=s
+        self.rank = n
         if n>10:
             self.set_point(n-9.5)
     
