@@ -156,6 +156,12 @@ def start_game(dealer,players): #Pour un reshuffle
         if bid != "Passe":    
             game_on=bool('True'==input("Pour continuer, écrire True"))
             dealer+=1
+               
+def end_game(dealer,players):
+    print("\n---------------------------------\n")
+    print(" La partie est terminée")
+    for i in range(4):
+        print("\n Le score du joueur " + str(i) + " est de " + str(players[i].get_score()))               
 
 
 if __name__ == '__main__':
