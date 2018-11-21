@@ -40,9 +40,9 @@ def result(oulders,bid,points,bonus_bidder,bonus_defenders):
     else:
         g=points-56
     if g<0:
-        s=(g-25+bonus_bidder-bonus_defender)*multiplier
+        s=(g-25+bonus_bidder-bonus_defenders)*multiplier
     else:
-        s=(g+25+bonus_bidder-bonus_defender)*multiplier
+        s=(g+25+bonus_bidder-bonus_defenders)*multiplier
     return s
 
           
@@ -148,7 +148,7 @@ def game(players,dealer):
                         points_bidder+=4#On donne les points de l'excuse au Preneur
                         points_defenders-=4#On retire les points de l'excuse à la défense
                         oulders-=1
-        
+
         
                 
         if first_player==bidder:
