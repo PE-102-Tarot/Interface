@@ -2,7 +2,7 @@
 """
 Created on Mon Oct 29 14:31:52 2018
 
-@author: TeamIATECH
+@author: PE_102
 """
 from Player import Player
 from Trump import Trump
@@ -61,11 +61,11 @@ class Human(Player):
                              print("\nLes cartes du chien")
                              for i,el in enumerate(dog):
                                  print(str(i)+"-->"+str(el))
-                             n1 = int(input("Le numero de la carte à mettre dans le chien"))
-                             n2 = int(input("Le numero de la carte à mettre dans votre jeu"))
-                             
+                             n1 = input("Le numero de la carte à mettre dans le chien")
+                             n2 = input("Le numero de la carte à mettre dans votre jeu")
+                            
                              print("\n-----------------------------------------------------------\n")
-                             if n1 == 69 or n2 == 69:
+                             if type(n1)!=int or type(n2) != int or n1 == 69 or n2 == 69:
                                  still_choosing = False
                                  break
                              elif n1 < 19 and n2<6 : 
@@ -78,7 +78,7 @@ class Human(Player):
                                  self.set_hand(hand)
                              else:
                                  print("Veuillez renseigner un numero valide")
-                    if choice == "Petite": #Le joueuur à choisi Garde
+                    if choice == "Petite": #Le joueuur à choisi Petite, meme si tout recpoer n'est pas le plus optimisé
                         still_choosing =True#Il lui est donc proposé d'échanger ses cartes avec le chien(dog)
                         print("\nVous avez choisi Petite")#bite
                         print("\nVous Pouvez échanger vos cartes avec celles qui sont dans le chien")
@@ -91,24 +91,29 @@ class Human(Player):
                              print("\nLes cartes du chien")
                              for i,el in enumerate(dog):
                                  print(str(i)+"-->"+str(el))
-                             n1 = int(input("Le numero de la carte à mettre dans le chien"))
-                             n2 = int(input("Le numero de la carte à mettre dans votre jeu"))
-                             
-                             print("\n-----------------------------------------------------------\n")
-                             if n1 == 69 or n2 == 69:
-                                 still_choosing = False
-                                 break
-                             elif n1 < 19 and n2<6 : 
-                                 hand = self.get_hand()
-                                 
-                                 card1 = hand.pop(n1)
-                                 card2 = dog.pop(n2)
-                                 dog.append(card1)
-                                 hand.append(card2)
-                                 self.set_hand(hand)
-                             else:
+                             n1 = input("Le numero de la carte à mettre dans le chien")
+                             n2 = input("Le numero de la carte à mettre dans votre jeu")
+                             try:
+                                 n1 = int(n1)
+                                 n2 = int(n2)
+                                 print("\n-----------------------------------------------------------\n")
+                                 if n1 == 69 or n2 == 69:
+                                     still_choosing = False
+                                     break
+                                 elif n1 < 19 and n2<6 : 
+                                     hand = self.get_hand()#Echange de cartes
+                                     
+                                     card1 = hand.pop(n1)
+                                     card2 = dog.pop(n2)
+                                     dog.append(card1)
+                                     hand.append(card2)
+                                     self.set_hand(hand)
+                                 else:
+                                     print("Veuillez renseigner un numero valide")
+                             except:
                                  print("Veuillez renseigner un numero valide")
-                                 
+
+                                     
                             
                             
                         
