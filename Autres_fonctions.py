@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-PeitPet
 """
 Created on Mon Oct 29 14:14:04 2018
 @author: TeamIATECH
@@ -12,12 +12,9 @@ from Human import Human
 from IA import IA
 import random
 import operator#Pour trier les cartes
-
      
 def bidding(dealer,players,dog):
     first_chooser = (dealer+1)%4
-    
-    
     for i in range(4):
         index = (first_chooser+i)%4
         if isinstance(players[index],Human):
@@ -29,7 +26,7 @@ def bidding(dealer,players,dog):
     #Reshuffle Game
 
 
-def result(oulders,bid,points):
+def result(oulders,bid,points,bonus_bidder,bonus_defenders):
     """Return the scoring points that each player gives to the bidder
     
     The bonuses are not counted here."""
@@ -43,9 +40,9 @@ def result(oulders,bid,points):
     else:
         g=points-56
     if g<0:
-        s=(g-25)*multiplier
+        s=(g-25+bonus_bidder-bonus_defender)*multiplier
     else:
-        s=(g+25)*multiplier
+        s=(g+25+bonus_bidder-bonus_defender)*multiplier
     return s
 
           
@@ -114,21 +111,22 @@ def game(players,dealer):
     if bid =="Passe":
        return bid
     print("Le joueur "+str(bidder)+" a pris un contrat: "+bid)
+    
     for i in range(4):
         players[i].set_hand(sorting(players[i].get_hand()))
     first_player=(dealer+1)%4
-    points_bidder, points_defenders, oulders= 0, 0, 0
+    points_bidder, points_defenders, oulders,bonus_bidder,bonus_defenders= 0, 0, 0,0, 0
     previous_trick=[]
     for i in range(18):
         trick=[]
-        for i in range(4):
-            index=(first_player+i)%4
+        for j in range(4):
+            index=(first_player+j)%4
             card=players[index].play(trick)
             print("Joueur "+str(index)+" a joué "+str(card))
             trick.append(card)
         first_player=(first_player+Player.best_card(trick))%4
         print ("Le joueur "+str(first_player)+" a remporté ce pli\n")
-        print ("-"*60)
+        
         for j,el in enumerate(trick):#Traitement de l'excuse:
             if isinstance(el, Excuse):#Si un joueur a posé l'excuse
                 if i!=17:#Si ce n'est pas le dernier pli
@@ -150,12 +148,27 @@ def game(players,dealer):
                         points_bidder+=4#On donne les points de l'excuse au Preneur
                         points_defenders-=4#On retire les points de l'excuse à la défense
                         oulders-=1
+        
+        
+                
         if first_player==bidder:
             points_bidder+=sum(card.get_point() for card in trick)
         else:
             points_defenders+=sum(card.get_point() for card in trick)
             oulders+=sum(card.get_oulder() for card in trick)
         previous_trick=trick
+        if i == 17:
+            for i in range(4):#PETIT AU BOUT
+                if isinstance(trick[i],Trump) and trick[i].get_rank()==1:#C'est le seul moyen de verifier qu'on a bien le petit au Bout
+                    print("\nPetit au bout")
+                    if first_player == bidder:#On ajoute la prime
+                        bonus_bidder+=10
+                    else:
+                        bonus_defenders +=10
+        
+        print ("-"*60)     
+              
+    
     if bid=="Garde Contre":
         points_defenders+=sum(card.get_point() for card in dog)
     else:
@@ -164,7 +177,7 @@ def game(players,dealer):
     print("Points défenseurs: "+str(points_defenders))
     print("(Points chien: "+str(sum(card.get_point() for card in dog))+")")
     print("Oulders défenseurs: "+str(oulders))
-    score=result(oulders,bid,points_bidder)
+    score=result(oulders,bid,points_bidder,bonus_bidder,bonus_defenders)
     players[bidder].set_score(score*3)
     for i in range(4):
         if i!=bidder:
@@ -186,12 +199,16 @@ def start_game(dealer,players): #Pour un reshuffle
         if bid != "Passe":    
             game_on=bool('True'==input("Pour continuer, écrire True"))
             dealer+=1
-               
+    end_game(dealer,players)
+    
 def end_game(dealer,players):
     print("\n---------------------------------\n")
     print(" La partie est terminée")
     for i in range(4):
-        print("\n Le score du joueur " + str(i) + " est de " + str(players[i].get_score()))               
+        print("\n Le score du joueur " + str(i) + " est de " + str(players[i].get_score()))
+        
+    
+    
 
 
 if __name__ == '__main__':
