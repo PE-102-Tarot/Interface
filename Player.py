@@ -41,19 +41,19 @@ class Player():
         This list is often a trick of two, three or four cards.
         The index (0, 1, 2, or 3) thus defines the winner of the trick
         """
-        w_card=cards[0]
+        w_card=cards[0][0]
         w=0
         for i in range(1,len(cards)):
             if isinstance(w_card, Trump):
-                if isinstance(cards[i], Trump) and cards[i]>w_card:
-                    w_card, w=cards[i], i
+                if isinstance(cards[i][0], Trump) and cards[i][0]>w_card:
+                    w_card, w=cards[i][0], i
             elif isinstance(w_card, Card):
-                if isinstance(cards[i], Trump):
-                    w_card, w=cards[i], i
-                elif isinstance(cards[i], Card) and cards[i].get_suit()==w_card.get_suit() and cards[i].get_rank()>w_card.get_rank():
-                    w_card, w=cards[i], i
+                if isinstance(cards[i][0], Trump):
+                    w_card, w=cards[i][0], i
+                elif isinstance(cards[i][0], Card) and cards[i][0].get_suit()==w_card.get_suit() and cards[i][0].get_rank()>w_card.get_rank():
+                    w_card, w=cards[i][0], i
             elif isinstance(w_card, Excuse):
-                w_card, w=cards[i], i
+                w_card, w=cards[i][0], i
         return w
 
     def playing_trump(self, trick):
@@ -63,8 +63,8 @@ class Player():
             return hand
         else:
             best_trump=0
-            if isinstance( trick[Player.best_card(trick)], Trump) :
-                best_trump=trick[Player.best_card(trick)].get_rank()
+            if isinstance (trick[Player.best_card(trick)][0], Trump) :
+                best_trump=((trick[Player.best_card(trick)])[0]).get_rank()
             K=[el for el in L if el.get_rank()>best_trump]
             """
                 if K==[]:
@@ -82,16 +82,16 @@ class Player():
                 ex=[el]
         if trick==[]:
             return hand
-        elif isinstance(trick[0], Trump):
+        elif isinstance(trick[0][0], Trump):
             return self.playing_trump(trick)+ex
-        elif isinstance(trick[0], Card):
-            suit=trick[0].get_suit()
+        elif isinstance(trick[0][0], Card):
+            suit=trick[0][0].get_suit()
             L=[el for el in hand if (isinstance(el,Card) and el.get_suit()==suit)]
             if L==[]:
                 return self.playing_trump(trick)+ex
             else :
                 return L+ex
-        elif isinstance(trick[0], Excuse):
+        elif isinstance(trick[0][0], Excuse):
             return self.playable_cards(trick[1:])
  
 
