@@ -14,8 +14,8 @@ class Card(PlayingCard):
     Point: 0.5 or 1.5 or 2.5 or 3.5 or 4.5
     Suit: 'S','H','D','C'
     """
-    def __init__(self, n, s):
-        PlayingCard.__init__(self, n)
+    def __init__(self, n, s,str_image_on, parent):
+        PlayingCard.__init__(self, n,str_image_on, parent)
         self.__suit=s
         self.rank = n
         if n>10:
@@ -23,6 +23,9 @@ class Card(PlayingCard):
     
     def get_suit(self):
         return self.__suit
+    
+    def get_rank(self):
+        return self.rank
     
     def __str__(self):
         """Clever use of dictionnaries"""
@@ -33,13 +36,13 @@ class Card(PlayingCard):
     def __repr__(self):
         return "Card({},'{}')".format(self.get_rank(), self.__suit)
     
-if __name__ == '__main__':
-    L=[Card(10, 'H'), Card(11, 'H'), Card(14, 'H'), Card(3, 'C'), Card(3, 'D'), Card(13,'S')]
-    print(L)
-    for el in L:
-        print(el)
-        print(el.get_rank())
-        print(el.get_point())
-        print(el.get_suit())
-
-    
+#if __name__ == '__main__':
+#    L=[Card(10, 'H'), Card(11, 'H'), Card(14, 'H'), Card(3, 'C'), Card(3, 'D'), Card(13,'S')]
+#    print(L)
+#    for el in L:
+#        print(el)
+#        print(el.get_rank())
+#        print(el.get_point())
+#        print(el.get_suit())
+#
+#    

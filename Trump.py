@@ -4,13 +4,13 @@ Created on Mon Oct 29 14:27:59 2018
 
 @author: PE_102
 """
-from PlayingCard import PlayingCard
+from PlayingCard import *
 
 
 class Trump(PlayingCard):
     """Trump Cards"""
-    def __init__(self, n):
-        PlayingCard.__init__(self, n)
+    def __init__(self, n,str_image_on, parent):
+        PlayingCard.__init__(self,n,str_image_on, parent)
         if n==1 or n==21:
             self.set_point(4.5)
             self.set_oulder(1)
@@ -44,21 +44,21 @@ class Trump(PlayingCard):
             return True
 
 
-if __name__ == '__main__':
-    Atout10=Trump(10)
-    Atout1=Trump(1)
-    Atout21=Trump(21)
-    L=[Atout10,Atout1,Atout21]
-    print(L)
-    print(Atout10)
-    print(Atout1)
-    print(Atout21)
-    print(Atout10.get_rank())
-    print(Atout1.get_rank())
-    print(Atout21.get_rank())
-    print(Atout10.get_point())
-    print(Atout1.get_point())
-    print(Atout21.get_point())
-    print(sorted(L))
-    
+#if __name__ == '__main__':
+#    Atout10=Trump(10)
+#    Atout1=Trump(1)
+#    Atout21=Trump(21)
+#    L=[Atout10,Atout1,Atout21]
+#    print(L)
+#    print(Atout10)
+#    print(Atout1)
+#    print(Atout21)
+#    print(Atout10.get_rank())
+#    print(Atout1.get_rank())
+#    print(Atout21.get_rank())
+#    print(Atout10.get_point())
+#    print(Atout1.get_point())
+#    print(Atout21.get_point())
+#    print(sorted(L))
+#    
     

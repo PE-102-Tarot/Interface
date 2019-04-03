@@ -4,42 +4,32 @@ Created on Mon Oct 29 14:31:52 2018
 
 @author: PE_102
 """
-from Player import Player
+from player import *
 from Trump import Trump
 from Card import Card
 from Excuse import Excuse
 
 
 class Human(Player):
-    def __init__(self, hand, score, name):
-        Player.__init__(self, hand, score, name)
-        self.__hand= hand
-    
-    def play(self, trick):
-        if trick==[]:
-            print("C'est à vous de commencer le pli. Voici votre main:\n")
-        #else:
-          #  print("Rappel:les cartes jouées sont:")
-           # for el in trick:
-            #    print(el)
-        print("\nVous pouvez jouer les cartes suivantes:")
+    def __init__(self, score, name):
+        Player.__init__(self, score, name)
+        
+    def card_is_played(self,b):
+        pass
+        
+    #Redéfinir la méthode, remplacer les print par des actions visuelles
+    def play(self, trick, played_listener):
+
         playable_cards=Player.playable_cards(self, trick)
-        for i, el in enumerate(playable_cards):
-            print(str(i)+"-->"+str(el))
-        while True:
-            try:
-                card=int(input("Votre choix? (Indice Python)"))
-            except ValueError:
-                print("Entrez un numéro de la liste.")
-                continue
-            if card>=len(playable_cards) or card<0:
-                    print("Entrez un numéro de la liste.")
-            else:
-                break
-        self.get_hand().remove(playable_cards[card])
+        
+        '''Gérer ces cartes jouables : les illuminer ou griser les autres
+        Dans la boucle ci dessous, on attend le choix du joueur 
+        (terminer la boucle en cliquant sur la carte)'''
+
+        self.get_hand().get_cards().remove(playable_cards[card]) #WTF la classe cards a pas de methode remove, elle est dans hand
         return (playable_cards[card])
     
-    def bid(self,dog):
+'''    def bid(self,dog):
         listeBid = ["Passe","Petite","Garde","Garde sans","Garde contre"] 
         while True:
             print(listeBid)
@@ -120,9 +110,9 @@ class Human(Player):
                         
                 
                     return choice
-            print("\nArgument non valide")
+            print("\nArgument non valide")'''
 
 
-if __name__ == '__main__':
-    L=[Card(10, 'H'), Card(11, 'H'), Card(14, 'H'), Card(3, 'C'), Card(3, 'D'), Card(13,'S')]
-    joueur1=Human(L,0,"Jean")
+#if __name__ == '__main__':
+#    L=[Card(10, 'H'), Card(11, 'H'), Card(14, 'H'), Card(3, 'C'), Card(3, 'D'), Card(13,'S')]
+#    joueur1=Human(L,0,"Jean")

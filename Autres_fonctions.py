@@ -2,6 +2,13 @@
 """
 Created on Mon Oct 29 14:14:04 2018
 @author: TeamIATECH
+
+Redéfinir les print des classes pour les remplacer par des effets visuels
+Vérfier la concordance des méthodes utilisées avec celles des classes 
+de l'interface
+
+Renommer cette classe "game.py" et la lancer dans window.py
+
 """
 from PlayingCard import PlayingCard
 from Trump import Trump
@@ -18,6 +25,8 @@ def bidding(dealer,players,dog):
     for i in range(4):
         index = (first_chooser+i)%4
         if isinstance(players[index],Human):
+            #On redéfinit le chien : une fenetre s'ouvre avec choix multiple, on note le choix"
+            
             choice = players[index].bid(dog)
             if choice != "Passe":
                 return index,choice
@@ -123,11 +132,11 @@ def game(players,dealer):
             index=(first_player+j)%4
             card=players[index].play(trick)
             print("Joueur "+str(index)+" a joué "+str(card))
-            trick.append((card,index))
+            trick.append(card)
         first_player=(first_player+Player.best_card(trick))%4
         print ("Le joueur "+str(first_player)+" a remporté ce pli\n")
         
-        for el,j in enumerate(trick):#Traitement de l'excuse:
+        for j,el in enumerate(trick):#Traitement de l'excuse:
             if isinstance(el, Excuse):#Si un joueur a posé l'excuse
                 if i!=17:#Si ce n'est pas le dernier pli
                     if (j==bidder and i!=17):#Si ce joueur est le Preneur
@@ -152,14 +161,14 @@ def game(players,dealer):
         
                 
         if first_player==bidder:
-            points_bidder+=sum(card[0].get_point() for card in trick)
+            points_bidder+=sum(card.get_point() for card in trick)
         else:
-            points_defenders+=sum(card[0].get_point() for card in trick)
-            oulders+=sum(card[0].get_oulder() for card in trick)
+            points_defenders+=sum(card.get_point() for card in trick)
+            oulders+=sum(card.get_oulder() for card in trick)
         previous_trick=trick
         if i == 17:
             for i in range(4):#PETIT AU BOUT
-                if isinstance(trick[i][0],Trump) and trick[i][0].get_rank()==1:#C'est le seul moyen de verifier qu'on a bien le petit au Bout
+                if isinstance(trick[i],Trump) and trick[i].get_rank()==1:#C'est le seul moyen de verifier qu'on a bien le petit au Bout
                     print("\nPetit au bout")
                     if first_player == bidder:#On ajoute la prime
                         bonus_bidder+=10
@@ -208,6 +217,8 @@ def end_game(dealer,players):
         print("\n Le score du joueur " + str(i) + " est de " + str(players[i].get_score()))
         
     
+    
+
 
 if __name__ == '__main__':
     #print(Player.best_card([Card(10,'H'),Card(11,'S'),Card(8,'H'),Card(13,'H')]))

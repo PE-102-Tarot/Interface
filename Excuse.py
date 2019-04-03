@@ -12,19 +12,19 @@ class Excuse(PlayingCard):
     Rank: 0
     Point: 4.5
     """
-    def __init__(self):
-        PlayingCard.__init__(self, 0, 4.5, 1)
+    def __init__(self,str_image_on, parent):
+        PlayingCard.__init__(self, 0,str_image_on, parent,4.5, 1)
     
     def __str__(self):
         return "Excuse"
     
     def __repr__(self):
         return "Excuse()"
-
-if __name__ == '__main__':
-    fool=Excuse()
-    print(fool)
-    print([fool])
-    print(fool.get_rank())
-    print(fool.get_point())
-    
+#
+#if __name__ == '__main__':
+#    fool=Excuse()
+#    print(fool)
+#    print([fool])
+#    print(fool.get_rank())
+#    print(fool.get_point())
+#    
