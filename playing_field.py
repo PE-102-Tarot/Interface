@@ -32,7 +32,16 @@ class Playing_Field(Canvas):
         self.__height = parent.get_height()
         self.__players = []
         self.__deck = self.create_deck()
+        
+        #Pour le tour de jeu
         self.__trick = Trick(self)
+        self.__bidder = 0
+        self.__deadler = 0
+        self.__players_left = 0
+        
+        self.__trick_bidder = Trick(self)
+        self.__trick_def = Trick(self)
+        
         self.__dog = Dog(self)
         
     def get_deck(self):
@@ -49,10 +58,28 @@ class Playing_Field(Canvas):
     
     def get_trick(self):
         return self.__trick
+    def get_trick_bidder(self):
+        return self.__trick_bidder
+    def get_trick_def(self):
+        return self.__trick_def
     
     def get_dog(self):
         return self.__dog
-    
+    def get_players_left(self):
+        return self.__players_left
+    def get_dealer(self):
+        return self.__dealer
+    def get_bidder(self):
+        return self.__bidder
+    def set_players_left(self,nb):
+        self.__players_left = nb
+    def set_dealer(self,dealer):
+        self.__dealer = dealer
+    def set_bidder(self,bidder):
+        self.__bidder = bidder
+    def set_trick(self,trick):
+        self.__trick = trick
+        
     def disable_all_cards(self):
         """Désctive la possibilité de cliquer sur les cartes"""
         players = self.get_players()  
@@ -105,7 +132,7 @@ class Playing_Field(Canvas):
             for i in range(1, 11):                 
                 if i == 1 :
                     L.append(Card(1,suit,"cards_img/As "+s+".png",self))
-                elif not (i==9 and s == 'pique'):
+                else:
                     L.append(Card(i,suit,"cards_img/"+str(i)+" "+s+".png",self))
             k = 1
             for j in ('valet','cavalier','dame','roi'):
@@ -166,8 +193,8 @@ class Playing_Field(Canvas):
 #        h2.set_position(ouest)
 #        h3.set_position(nord)
 #        h4.set_position(est)
-        h1.show(self)
-        h2.show(self)
-        h3.show(self)
-        h4.show(self)
+        h1.show()
+        h2.show()
+        h3.show()
+        h4.show()
         self.__dog.show_dog(self)

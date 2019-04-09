@@ -18,8 +18,8 @@ class Trick:
         self.__position = (self.__parent_canvas.get_width()//2-40,self.__parent_canvas.get_height()//2-40)
         self.__cards = []
         
-    def add_card(self,card):
-        card.add_trick()
+    def add_card(self,card,pos):
+        card.add_trick(pos)
         self.__cards.append(card)
         
     def get_cards(self):

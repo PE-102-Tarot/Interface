@@ -18,16 +18,14 @@ class Human(Player):
         pass
         
     #Redéfinir la méthode, remplacer les print par des actions visuelles
-    def play(self, trick, played_listener):
-
-        playable_cards=Player.playable_cards(self, trick)
-        
-        '''Gérer ces cartes jouables : les illuminer ou griser les autres
-        Dans la boucle ci dessous, on attend le choix du joueur 
-        (terminer la boucle en cliquant sur la carte)'''
-
-        self.get_hand().get_cards().remove(playable_cards[card]) #WTF la classe cards a pas de methode remove, elle est dans hand
-        return (playable_cards[card])
+    def play(self, card,trick):
+        '''On détermine déjà dans la gestion d'evenements les cartes jouables.
+        La fonction play a pour but d'indiquer la carte sur laquelle le joueur a cliqué,
+        de l'ajouter au trick et de la placer devant la main du joueur'''
+        x,y = self.get_hand().get_position()
+        pos = ((2*x+7*48)/2-48/2,y-89-25)
+        card.play(pos)
+        trick.add_card(card,pos)
     
 '''    def bid(self,dog):
         listeBid = ["Passe","Petite","Garde","Garde sans","Garde contre"] 

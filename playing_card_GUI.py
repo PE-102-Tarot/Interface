@@ -68,6 +68,9 @@ class Playing_Card_GUI():
     def set_doing_dog(self,b):
         self.__is_doing_dog = b
     
+    def in_hand(self):
+        return self.__in_hand
+    
     def disable(self):
         self.can_click = False
     def enable(self):
@@ -75,7 +78,7 @@ class Playing_Card_GUI():
     
     def hitbox_listener(self,event):
         #Si la souris a le focus sur la carte, on la surélève (et on la fait briller ?)
-        if self.__in_hand:
+        if self.__in_hand and self.can_click:
             flag_x = (event.x > self.__hitbox[0] and event.x < self.__hitbox[0]+self.__hitbox[2])
             flag_y = (event.y > self.__hitbox[1] and event.y < self.__hitbox[1]+self.__hitbox[3])
             if not self.__IS_UP:
@@ -93,10 +96,13 @@ class Playing_Card_GUI():
         if flag_x and flag_y:
             print(self.__name, " : Clicked")
             self.set_in_hand(False)
-            if self.__is_doing_dog:
+            if self.get_hand().get_player().get_doing_dog():
+                #self.get_hand().remove(self)
                 self.__parent_canvas.get_dog().add_card(self)
+                self.add_dog(self.__parent_canvas.get_dog())
+                '''
             else:
-                self.__parent_canvas.get_trick().add_card(self)
+                self.__parent_canvas.get_trick().add_card(self)'''
     
     def play(self,pos):
         '''reste à afficher la carte à la position souhaitée et donnée en argument 
@@ -104,20 +110,30 @@ class Playing_Card_GUI():
         de la fonction play)'''
         
         self.set_in_hand(False)
-        print(pos)
+        #print(pos)
         self.set_position(pos[0],pos[1])
         self.draw(self.__parent_canvas)
         #self.__parent_canvas.get_trick().add_card(self)
         
-    def add_trick(self):
-        print(self.__parent_canvas.get_trick().get_position())
-        self.set_position(self.__parent_canvas.get_trick().get_position()[0],self.__parent_canvas.get_trick().get_position()[1])
+    def add_trick(self,pos):
+        #print(pos)
+        self.set_position(pos[0],pos[1])
+        if self.get_hand() != None:
+            self.get_hand().remove(self)
+        self.__hand = None
+        self.set_in_hand(False)
         self.draw(self.__parent_canvas.get_trick().get_parent())
     
-    def add_dog(self):
-        print(self.__parent_canvas.get_dog().get_position())
+    def add_dog(self,dog):
         self.set_position(self.__parent_canvas.get_dog().get_position()[0],self.__parent_canvas.get_dog().get_position()[1])
-        self.draw(self.__parent_canvas.get_dog().get_parent())
+        
+        #Bug sans cette condition à cause de l'initialisation à None du constructeur
+        if self.get_hand() != None:
+            self.get_hand().remove(self)
+        
+        self.draw(self.__parent_canvas)
+        self.set_in_hand(False)
+        self.__hand = None
         
     def get_up(self):#Fonction de surélèvelent
         self.set_position(self.__position[0],self.__position[1]-20) #On surélève de 20px par exemple
@@ -177,6 +193,11 @@ class Playing_Card_GUI():
     def get_name(self):
         return self.__name
     
+    def get_hand(self):
+        return self.__hand
+    def get_parent(self):
+        return self.__parent_canvas
+    
     def __str__(self):
         return self.get_name()
     
@@ -189,7 +210,7 @@ def load_images():
         for c in colors:
             if i == 1:
                 CARDS_FACE.append(PhotoImage(file="cards_img/As "+c+".png")) #convertir les JPG en PNG sinon erreur ! 
-            elif i != 9 and c != "pique":
+            else:
                 CARDS_FACE.append(PhotoImage(file="cards_img/"+str(i)+" "+c+".png"))
     
     for i in heads:

@@ -9,6 +9,7 @@ from tkinter import *
 from playing_card_GUI import *
 from playing_field import *
 from game import *
+import time
 
 class Window(Tk):
     
@@ -73,19 +74,40 @@ def mouse_moving(event):
         if p.is_bidder() and win.get_doing_dog():
             for c in cards:
                 c.hitbox_listener(event)
+        elif p.is_playing():
+            playable = p.playable_cards(win.get_field().get_trick())
+            for c in cards:
+                if c in playable:
+                    c.hitbox_listener(event)
   
 def mouse_clicked(event):
-    players = win.get_field().get_players()  
+    players = win.get_field().get_players() 
     for p in players:
         cards = p.get_hand().get_cards()
         if p.is_bidder() and win.get_doing_dog():
             win.inc_cards_dog()
+            
             if win.get_counter_cards_dog() == 6:
+                #On double la détection ici pour que la 6e carte cliquée aille bien dans le chien
+                for c in cards:
+                    c.click_listener(event)
+                time.sleep(0.5)
                 win.set_doing_dog(False)
                 #Fonciton permettant à la partie de se lancer (on a fini de mettre en place le jeu)
-                basic_game.start_turn(basic_game.get_dealer(),basic_game.get_players(),basic_game.get_bidder())
+                basic_game.start_turn_seg_1(basic_game.get_dealer(),basic_game.get_players(),basic_game.get_bidder())
             for c in cards:
                 c.click_listener(event)
+        elif p.is_playing() and isinstance(p,Human):
+            playable = p.playable_cards(win.get_field().get_trick())
+            for c in cards:
+                if c in playable:
+                    c.enable()
+                    c.click_listener(event)
+                    if not c.in_hand():
+                        #print("carte ",c," jouee")
+                        p.play(c,win.get_field().get_trick())
+                        p.set_playing(False)
+                        basic_game.start_turn_seg_2()
 
 win.bind('<Motion>',mouse_moving)
 win.bind('<Button-1>',mouse_clicked)

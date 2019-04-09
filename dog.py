@@ -15,10 +15,13 @@ class Dog:
         self.__cards = []
         
     def add_card(self,card):
-        card.add_trick()
+        card.add_dog(self)
         self.__cards.append(card)
         #Il faut raise une erreur ici si le nombre de cartes dans le chien est trop grand
      
+    def get_cards(self):
+        return self.__cards
+    
     def get_length(self):
         return len(self.__cards)
         
@@ -27,6 +30,11 @@ class Dog:
     
     def get_position(self):
         return self.__position
+    
+    def give_cards(self,player):
+        player.add_dog(self)
+        
+        self.__cards = []
     
     def show_dog(self,canvas):
         i=0

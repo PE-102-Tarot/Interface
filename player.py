@@ -25,6 +25,8 @@ class Player():
         #Si c'est le tour du joueur
         self.__is_playing = False
         
+        self.__is_doing_dog = False
+        
         #Si il est le bidder
         self.__is_bidder = False
     
@@ -34,8 +36,13 @@ class Player():
         return self.__score
     def get_name(self):
         return self.__name
+    def get_doing_dog(self):
+        return self.__is_doing_dog
+    def set_doing_dog(self,b):
+        self.__is_doing_dog = b
     def set_hand(self, hand):
         self.__hand= hand
+        hand.set_player(self)
     def set_score(self, score):
         """Add the score of a game to the total score."""
         self.__score+= score
@@ -73,9 +80,13 @@ class Player():
         Vérifie si la main contient des atouts, si ce n'est pas le cas, elle renvoie
         toute la main du joueur en tant que cartes jouables, sinon,
         elle renvoit une liste d'atouts supérieurs au précédent atout joué
+        
+        !! Il faut gérer le cas où l'atout précédemment joué est trop grand !!
+        
         '''
-        hand=self.get_hand().get_cards()[:]
+        hand=self.get_hand().get_cards()
         L=[el for el in hand if isinstance(el,Trump)]
+
         if L==[]:
             return hand
         else:
@@ -95,13 +106,14 @@ class Player():
     def playable_cards(self, trick):
         hand=self.get_hand().get_cards()[:]
         ex=[]
+        cards_trick = trick.get_cards()
         for el in hand:
             if isinstance(el,Excuse):
                 ex=[el]
-        cards_trick = trick.get_cards()
-        
+                
         if cards_trick==[]:
             return hand #Si dans le tas de cartes jouées il n'y a rien on peut tout jouer
+        
         elif isinstance(cards_trick[0], Trump):
             #Si la premiere carte est un atout, on doit jouer un atout,
             #si on en a pas, n'importe quelle carte
@@ -111,6 +123,7 @@ class Player():
         elif isinstance(cards_trick[0], Card):
             #Si on ne joue pas atout, on regarde quelle couleur est jouée
             suit=cards_trick[0].get_suit()
+    
             #!!! N'implique pas forcément de jouer au dessus de la dernière carte
             L=[el for el in hand if (isinstance(el,Card) and el.get_suit()==suit)]
             if L==[]:
@@ -132,6 +145,17 @@ class Player():
     def set_is_bidder(self,b):
         self.__is_bidder = b
 
+    #Sert surtout pour l'ajout du chien à la main
+    def add_dog(self,dog):
+        cards = dog.get_cards()
+        #On les active pour qu'elles puissent servir au joueur tout de suite
+        for c in cards:
+            c.enable()
+            c.set_in_hand(True)
+            c.set_hand(self.get_hand())
+        self.__hand.add_cards(cards)
+        self.__hand.show()
+        
     def is_bidder(self):
         return self.__is_bidder
 

@@ -32,6 +32,7 @@ class Game:
         self.__dealer = None
         self.__bidder = None
         self.__bid = None
+        self.__counter_turn = 0
         #self.data = Database(players) 
         #eventuellement mettre setter/getter
     
@@ -206,7 +207,9 @@ class Game:
         
         #On informe la fenêtre que le bidder doit faire son chien
         self.__window.set_doing_dog(True)
-        
+        players[bidder].set_doing_dog(True)
+        #On donne le chien au joueur
+        self.__interface.get_dog().give_cards(players[bidder])
         self.__interface.enable_playing_player_cards_only(players[bidder],players)
         #self.do_dog()
         '''#seulement si on veut vraiment trier les cartes des joueurs
@@ -215,25 +218,53 @@ class Game:
             #On met à jour les mains
             '''
         
-    def start_turn(self,dealer,players,bidder):
-        
+    def start_turn_seg_1(self,dealer,players,bidder):
+        '''
+        Cette première partie de fonction se lance entre le début du tour et le moment
+        où le joueur humain joue. On lance la dexieme partie de cette fonction en 
+        envoyant toutes les informations utiles à la seconde.
+        '''
+        #On compte le nombre de tours
+        self.__counter_turn = self.__counter_turn+1       
+        #Le joueur a fini de faire son chien, la partie commence
+        players[bidder].set_doing_dog(False)
+        #On remet en odre la main du joueur ayant fait le chien
+        players[bidder].get_hand().replace()
         first_player=(dealer+1)%4
         #On initialise les points des joueurs à 0
-        points_bidder, points_defenders, oulders,bonus_bidder,bonus_defenders= 0, 0, 0, 0, 0
+        #points_bidder, points_defenders, oulders,bonus_bidder,bonus_defenders= 0, 0, 0, 0, 0
         #previous trick = le plis précédent
         previous_trick=[]
         #boucle des 18 tours de jeu -> on en met un seul pour l'instant
         #for i in range(18):
-        trick=Trick(self.__interface)
+        
+        #Trick temporaire correspondant au tas du tour
+        temp_trick=Trick(self.__interface)
+        #Trick total du bidder
+        trick_bidder = self.__interface.get_trick_bidder()
+        #Trick total du defenseur
+        trick_def = self.__interface.get_trick_def()
+        
+        self.__interface.set_trick(temp_trick)
+        print("seg1")
         for j in range(4):
             index=(first_player+j)%4
             if isinstance(players[index], IA):
-                card = players[index].play(trick) 
+                players[index].play(temp_trick) 
             else:
-                card = None
+                players[index].set_playing(True)                    
+                players_left = 4-j
+                print("joueurs restants : ", players_left)
+                break 
+        #STOCKAGE DES DONNEES
+        self.__interface.set_bidder(bidder)
+        self.__interface.set_dealer(dealer)
+        self.__interface.set_players_left(players_left)
+        self.__interface.set_trick(temp_trick)
+                #faire en sorte qu'on attende la réponse du joueur avant de finir la fonciton
+                
                 #dans ce cas là c'est l'humain qui joue, gérer les variables de la fenetre
             #print("Joueur "+str(index)+" a joué "+str(card))
-            trick.add_card(card)
         '''first_player=(first_player+Player.best_card(trick))%4
         print ("Le joueur "+str(first_player)+" a remporté ce pli\n")
         
@@ -295,6 +326,43 @@ class Game:
         print("Evolution score bidder: "+str(score*3))
         print("Evolution score défenseurs: "+str(-score))'''
     
+    def start_turn_seg_2(self):
+        '''cette fonction fait jouer les IA après le jouers s'il y en a. 
+        L'argument players_left (int) permet de dire combien d'IA doivent jouer après
+        l'humain. S'il n'y en a pas ou après qu'elle aient toutes joué, on traite la fin
+        du tour : qui remporte le pli, le trick total du gagnant doit recevoir le trick temporaire
+        et le trick temporaire est réinitialisé. On empile toutes les cartes sur le trick
+        emporté.
+        '''
+        dealer = self.__interface.get_dealer()
+        bidder = self.__interface.get_bidder()
+        players_left = self.__interface.get_players_left()
+        players = self.__interface.get_players()
+        temp_trick = self.__interface.get_trick()
+        trick_bidder= self.__interface.get_trick_bidder()
+        trick_def = self.__interface.get_trick_def()
+        
+        print("seg2")
+        first_player = (dealer+1)%4
+        #Seul des IA jouent ici
+        for i in range(players_left-1):
+            index=(1+bidder+i)%4
+            print(index)
+            players[index].play(temp_trick) 
+        print(temp_trick.get_cards())
+        winner = (first_player+Player.best_card(temp_trick.get_cards()))%4
+        if winner == bidder:
+            for c in temp_trick.get_cards():
+                trick_bidder.add_card(c,(0,0))
+        else:
+            for c in temp_trick.get_cards():
+                trick_def.add_card(c,(500,0))
+                
+        if self.__counter_turn < 18:
+            #On attend 1 sec avant de refaire un tour de jeu pour que tout ne soit pas immédiat
+            time.sleep(1)
+            self.start_turn_seg_1(dealer,players,bidder)
+            
     def begin_game(self,n):
         
         dealer=random.randint(0,3)

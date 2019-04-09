@@ -1,0 +1,40 @@
+Ajout d'un lien entre la main et le joueur associé
+Ajout d'un booleen is_doing_dog dans la classe player
+Ajout d'un canvas (référence à playinf_field) dans la classe Hand
+
+--- A faire ---
+Gérer le tour du joueur, par le biais d'une fonction "tour_joueur" : 
+ - indiquer à la fenêtre que c'est le tour du joueur : activer ses cartes jouables, 
+   la carte cliquée doit aller devant lui (fait)
+
+- si pb de gestion de l'attente : segmenter la fonction start_turn en une fonction turn_IA et turn_human, mettre le corps de 
+la fonction start_turn dans la classe window qui appelle ces fonctions (fait)
+- Calculer les points en fin de partie et annoncer le côté gagnant
+
+--- Bugs recensés --- 
+Le fait de fournir les informations entre les deux segments avec le return du segment 1 bug l'information : placer
+les infos dans le playing field directement (corrigé)
+Des fois les cartes se surélèvent pas alors qu'on peut cliquer dessus
+Les atouts jouables sont indiqués en fonction du premier joué et non pas du dernier
+
+--- Réglé ---
+Seul les cartes jouables sont maintenant soulevables et cliquables
+
+--- Remarque ---
+Quand c'est le joueur humain qui joue en dernier, aucun problème. 
+--> Soit se débrouiller pour se ramener à un situation où il joue en dernier (casse le jeu)
+--> sinon faire migrer tout le code dans la classe d'evenements
+--> !!! segmenter la methode start_turn : lorsque c'est le tour du joueur, on termine la fonction et on note qui sont les
+joueurs qui doivent encore jouer, on lancer la methode continue_turn aprè le choix du joueur. Après on relance autant
+que nécessaire la méthode start turn !!!! (fait)
+
+---> En fait si certaine IA jouent deux fois c'est parce qu'il y a une boucle sur le segment 1
+---> Explication : Si deux cartes proches sont cliquables, la hitbox est telle qu'on peut cliquer sur plusieurs cartes
+en même temps, le programme enregistre les clics et les joue au fur et à mesure (1)
+
+--- Bug majeur ---
+Trop de cartes sont jouées en même temps, revoir la segmentation du tour de jeu.
+Verifier si on peut cliquer en même temps sur deux cartes -> probleme des 5 cartes dans le chien au lieu de 6
+
+--- Piste d'amélioration du bug (1) ---
+On affiche entièrement toutes les cartes des joueurs pour pas avoir de problème de collision
