@@ -30,3 +30,5 @@ class Trick:
     
     def get_position(self):
         return self.__position
+    def set_position(self,pos):
+        self.__position = pos

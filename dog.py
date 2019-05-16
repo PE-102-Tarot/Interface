@@ -11,7 +11,7 @@ class Dog:
     
     def __init__(self, parent):
         self.__parent_canvas = parent
-        self.__position = (self.__parent_canvas.get_width()-250,self.__parent_canvas.get_height()-150)
+        self.__position = (self.__parent_canvas.get_width()-250,self.__parent_canvas.get_height()-200)
         self.__cards = []
         
     def add_card(self,card):

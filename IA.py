@@ -33,7 +33,8 @@ class IA(Player):
         card.set_position(x,y-40)'''
         #on retire la carte physiquement et réellement de la main et on la met (désactivée) au dessus de la main en attente
         #print("carte ajoutee au trick")
-        trick.add_card(playable_cards[0],pos)
+        print(card.get_name())
+        trick.add_card(card,pos)
 
 if __name__ == '__main__':
     pass

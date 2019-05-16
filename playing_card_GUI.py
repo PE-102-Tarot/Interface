@@ -13,6 +13,7 @@ Cette classe sera liée à toutes les PlayingCards et constitue leur aspect phys
 '''
 
 from tkinter import *
+import time
 
 #Contient TOUS les fichiers images des cartes
 CARDS_FACE= []
@@ -40,6 +41,9 @@ class Playing_Card_GUI():
         
         #Vérifie si la carte est cliquable
         self.can_click = True
+        
+        #Indique que la carte est cliquée
+        self.__click = False
         
         #Deux lignes suivantes à modifier selon la taille réelle
         #La position correspond au bord haut gauche de la carte
@@ -75,7 +79,8 @@ class Playing_Card_GUI():
         self.can_click = False
     def enable(self):
         self.can_click = True
-    
+    def is_clicked(self):
+        return self.__click
     def hitbox_listener(self,event):
         #Si la souris a le focus sur la carte, on la surélève (et on la fait briller ?)
         if self.__in_hand and self.can_click:
@@ -88,13 +93,14 @@ class Playing_Card_GUI():
             elif not flag_x or not flag_y:            
                 self.get_down()
                 self.__IS_UP = False
-
+    def set_clicked(self,b):
+        self.__click = b
     def click_listener(self,event):
         flag_x = (event.x > self.__hitbox[0] and event.x < self.__hitbox[0]+self.__hitbox[2])
         flag_y = (event.y > self.__hitbox[1] and event.y < self.__hitbox[1]+self.__hitbox[3])
-        
         if flag_x and flag_y:
             print(self.__name, " : Clicked")
+            self.__click = True
             self.set_in_hand(False)
             if self.get_hand().get_player().get_doing_dog():
                 #self.get_hand().remove(self)
@@ -116,7 +122,6 @@ class Playing_Card_GUI():
         #self.__parent_canvas.get_trick().add_card(self)
         
     def add_trick(self,pos):
-        #print(pos)
         self.set_position(pos[0],pos[1])
         if self.get_hand() != None:
             self.get_hand().remove(self)
@@ -176,10 +181,6 @@ class Playing_Card_GUI():
             canvas.delete(self.__id)
         self.__id = canvas.create_image(self.__position[0],self.__position[1],anchor=NW,image=self.__image_on)
         #canvas.config(height=self.__size[0],width=self.__size[1])       
-     
-#    def jouer_carte(self):
-#        #placer la carte sur le tas
-#        continue
      
     def set_hand(self,hand):
         self.__hand = hand

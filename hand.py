@@ -25,7 +25,10 @@ class Hand():
         for i in range(len(self.__cards)):
             if i == len(self.__cards)-1:
                 self.__cards[i].set_first(True)
-                
+            #gère si la personne est le joueur principal (en bas) ou l'ordi
+            '''if placement == "SOUTH":
+                self.__cards[i].set_position(self.__position[0]+i*WIDTH*1.1,self.__position[1])
+            else:'''
             self.__cards[i].set_position(self.__position[0]+i*WIDTH*0.35,self.__position[1])
             #On affiche les cartes l'une à côté de l'autre ici
             #Peut etre prévoir un affichage différent pour les mains de côité ?
@@ -44,7 +47,10 @@ class Hand():
         self.__player = player
     def add_cards(self,cards):
         for i in range(len(cards)):
-            cards[i].set_position(self.__position[0]+(len(self.__cards)+i)*WIDTH*0.35,self.__position[1])
+            '''if self.__placement == "SOUTH":
+                self.__cards[i].set_position(self.__position[0]+i*WIDTH*1.1,self.__position[1])
+            else:'''
+            self.__cards[i].set_position(self.__position[0]+i*WIDTH*0.35,self.__position[1])
         self.__cards = self.__cards + cards
     def set_cards(self,cards):
         self.__cards = cards
@@ -56,12 +62,14 @@ class Hand():
         for i in range(len(self.__cards)):
             if i == len(self.__cards)-1:
                 self.__cards[i].set_first(True)
-                
+            '''if self.__placement == "SOUTH":
+                self.__cards[i].set_position(self.__position[0]+i*WIDTH*1.1,self.__position[1])    
+            else:'''
             self.__cards[i].set_position(self.__position[0]+i*WIDTH*0.35,self.__position[1])
             self.show()
     def show(self):    
         for c in self.__cards:
-            #c.set_face_up(True) #A créé dans la classe Playing_Card_GUI
+            #c.set_face_up(True) #A créer dans la classe Playing_Card_GUI
             c.draw(c.get_parent())
     def hide(self):
         for c in self.__cards:

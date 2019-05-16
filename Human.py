@@ -23,7 +23,7 @@ class Human(Player):
         La fonction play a pour but d'indiquer la carte sur laquelle le joueur a cliqué,
         de l'ajouter au trick et de la placer devant la main du joueur'''
         x,y = self.get_hand().get_position()
-        pos = ((2*x+7*48)/2-48/2,y-89-25)
+        pos = (1200/2-48/2,y-89-25)
         card.play(pos)
         trick.add_card(card,pos)
     

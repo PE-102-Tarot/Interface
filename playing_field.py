@@ -33,11 +33,26 @@ class Playing_Field(Canvas):
         self.__players = []
         self.__deck = self.create_deck()
         
+        #Pour le socle des plis au milieu
+        self.__img_socle = PhotoImage(file="cards_img/zone.png")
+        self.__label = Label(image = self.__img_socle)
+        self.__label.image = self.__img_socle
+        self.pos_s1 = (1200//2-115//2,600//2+20)
+        self.pos_s2 = (1200//2-115//2+63,600//2+20)
+        self.__def = self.create_image(self.pos_s1[0],self.pos_s1[1],anchor=NW,image=self.__img_socle)
+        self.__att = self.create_image(self.pos_s2[0],self.pos_s2[1],anchor=NW,image=self.__img_socle)
+
         #Pour le tour de jeu
         self.__trick = Trick(self)
+        
+        #Pour l'affichage des cartes jouées au fur et à mesure
+        #self.__t1,self.__t2,self.__t3,self.__t4 = Trick(self),Trick(self),Trick(self),Trick(self)
+        
         self.__bidder = 0
-        self.__deadler = 0
+        self.__dealer = 0
         self.__players_left = 0
+        
+        self.__first_player = 0
         
         self.__trick_bidder = Trick(self)
         self.__trick_def = Trick(self)
@@ -71,6 +86,10 @@ class Playing_Field(Canvas):
         return self.__dealer
     def get_bidder(self):
         return self.__bidder
+    def get_first(self):
+        return self.__first_player
+    def set_first(self,p):
+        self.__first_player = p
     def set_players_left(self,nb):
         self.__players_left = nb
     def set_dealer(self,dealer):
@@ -140,7 +159,7 @@ class Playing_Field(Canvas):
                 k+=1
         L.append(Excuse("cards_img/Excuse.png",self))
         
-        return L
+        return L  
     
     #Il faut maintenant gérer les évênements, à savoir : lorsqu'une carte est cliqué,
     #Elle est posée devant le joueur (modifier playing_card_GUI, playing_field)
@@ -153,7 +172,7 @@ class Playing_Field(Canvas):
         #On initialise la position des points stratégiques EST,SUD,NORD et OUEST
         
         nord = (self.__width//2-3*50,50)
-        sud = (self.__width//2-3*50,self.__height-100)
+        sud = (self.__width//2-18*50*0.35//2,self.__height-100)
         est = (20,self.__height//2)
         ouest = (self.__width - 50*7,self.__height//2)
                 
